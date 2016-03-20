@@ -1,12 +1,16 @@
+CONFIG = -std=c++11
 
-CFLAGS = -g -std=c++11
+all:start
 
-all:main.o State.o
-	$(CXX) $(CFLAGS) $? 
+start:State.o main.o
+	g++ -g main.o State.o  $(CONFIG)
 
-main.o: main.cpp 
-	$(CXX) -c $(CFLAGS) $?
+State.o:State.cpp
+	g++ -g -c State.cpp $(CONFIG)
 
-hello.o: State.cpp
-	$(CXX) -c $(CFLAGS) $?  
+main.o:main.cpp
+	g++ -g -c main.cpp $(CONFIG) 
 
+
+clean:
+	rm *.o a.out 
