@@ -24,6 +24,7 @@ public:
 	char player;
 	int moves;
 	pair<int,int> move;
+	State realmove;
 
 
 	State(char table[3][3],int moves,char player,pair<int,int> move);

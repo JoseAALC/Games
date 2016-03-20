@@ -1,19 +1,22 @@
 #include "game.hpp"
-
+pair<int,int> winner;
 
 
 pair<int,int> game::minimax(State ini){
 	int v = maxValue(ini);
 	
-	return make_pair(0,0);
+	cout<<v<<endl;
+	return winner;
 }
 
 
 int game::maxValue(State u){
 	int check=u.getUtility();
 	
-	if(check != utility::unfinished)
+	if(check != utility::unfinished){
+		winner = u.move;
 		return check;
+	}
 	
 	int v = INT_MIN;
 	u.makeDescendents();
@@ -23,7 +26,6 @@ int game::maxValue(State u){
 		u.ls.pop_front();
 	}
 	return v;
-
 }
 
 int game::minValue(State u){
