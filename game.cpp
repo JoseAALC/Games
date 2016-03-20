@@ -1,6 +1,6 @@
 #include "game.hpp"
 pair<int,int> winner;
-
+int m= INT_MAX;
 
 pair<int,int> game::minimax(State ini){
 	int v = maxValue(ini);
@@ -13,8 +13,12 @@ pair<int,int> game::minimax(State ini){
 int game::maxValue(State u){
 	int check=u.getUtility();
 	
-	if(check != utility::unfinished){
-		winner = u.move;
+	if(check %700 ==0){
+		
+		if(u.moves<m){
+			winner = u.move;
+			m=u.moves;
+	}
 		return check;
 	}
 	
@@ -31,7 +35,7 @@ int game::maxValue(State u){
 int game::minValue(State u){
 	int check=u.getUtility();
 	
-	if(check != utility::unfinished)
+	if(check %700 ==0)
 		return check;
 	
 	int v = INT_MAX;
