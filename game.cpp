@@ -1,5 +1,5 @@
 #include "game.hpp"
-int n =0;
+
 movement max(movement a,movement b){
 	if(a.first < b.first)
 		return b;
@@ -9,18 +9,15 @@ movement max(movement a,movement b){
 
 movement min(movement a,movement b){
 	if(a.first > b.first)
-		return a;
-	else 
 		return b;
+	else 
+		return a;
 }
 
 pair<int,int> game::minimax(State ini){
 	movement v = maxValue(ini);
 
-	//assert(ini.table[winner.first][winner.second]=='.');
-	
-	cout<<v.first<<" "<<v.second.first<<" "<<v.second.second<<endl;
-
+	cout<<v.first<<endl;
 	return v.second;
 }
 
@@ -28,13 +25,15 @@ movement game::maxValue(State u){
 	movement check;
 	check.first=u.getUtility();
 
-	if(check.first == utility::victory || check.first == utility::tie || check.first == utility::defeat ){
+	if((check.first!=0 && check.first % 700 == 0 ) || u.moves ==4){
+		
 		check.second.first = u.move.first;
 		check.second.second = u.move.second;
 		return check;
 			
 	}
 	
+
 	movement v;
 	v.first= -1000;
 	v.second = make_pair(-2,-2);
@@ -43,9 +42,7 @@ movement game::maxValue(State u){
 	while(!u.ls.empty()){
 		
 		v= max(v,minValue(u.ls.front()));
-		
-		assert(minValue(u.ls.front()).first!=1000);
-		
+			
 		u.ls.pop_front();
 	}
 	return v;
@@ -55,7 +52,8 @@ movement game::minValue(State u){
 	movement check;
 	check.first=u.getUtility();
 	
-	if(check.first == utility::victory || check.first == utility::tie || check.first == utility::defeat ){
+	if((check.first!=0 && check.first % 700 == 0 ) || u.moves ==4){
+		
 		check.second.first = u.move.first;
 		check.second.second = u.move.second;
 		return check;
@@ -67,8 +65,10 @@ movement game::minValue(State u){
 	u.makeDescendents();
 	
 	while(!u.ls.empty()){
+
 		v = min(v,maxValue(u.ls.front()));
-		assert(maxValue(u.ls.front()).first!=-1000);
+
+		
 		
 		u.ls.pop_front();
 	}
@@ -132,13 +132,14 @@ void game::ui(){
 	
 	char choice; 
 
-
 	cout<<endl;
 	cout<<"\tWhich player will play first?"<<endl;
 	cout<<endl;
 	cin>>choice;
 
-	while(ini.getUtility() != utility::victory || ini.getUtility() != utility::tie || ini.getUtility() != utility::defeat){
+	cout<<"Utility: "<<ini.getUtility()<<endl;
+
+	while(ini.getUtility() % 700 != 0 || ini.getUtility()==0){
 
 		pair<int ,int> tmp;
 		switch(choice){

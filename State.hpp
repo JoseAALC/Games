@@ -11,7 +11,7 @@
 using namespace std;
 
 
-enum utility{ victory=700,tie=0,defeat=-700,unfinished='?'};
+enum utility{ victory=700,tie=1400,defeat=-700,unfinished='?'};
 
 
 
