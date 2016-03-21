@@ -1,7 +1,7 @@
 #include "State.hpp"
 
 
-char pc ='X';
+
 
 
 State::State(char table[][3],int moves,char player,pair<int,int> move){
@@ -61,13 +61,13 @@ int State::getUtility(){
 	for(int i=0;i<3;i++){
 		char here = table[i][i];
 		if(table[i][0]==table[i][1] && table[i][1]==table[i][2] && table[i][0]!='.')
-			if(pc == here)
+			if(player == here)
 				return utility::victory;
 			else
 				return utility::defeat;
 
 			if(table[0][i]==table[1][i] && table[1][i]==table[2][i] && table[0][i]!='.')
-				if(pc == here)
+				if(player == here)
 					return utility::victory;
 				else
 					return utility::defeat;
@@ -77,7 +77,7 @@ int State::getUtility(){
 
 			if(table[0][0]==table[1][1] && table[1][1]==table[2][2] && table[0][0]!='.'){
 				char here = table[0][0];
-				if(pc == here)
+				if(player == here)
 					return utility::victory;
 				else
 					return utility::defeat;
@@ -85,7 +85,7 @@ int State::getUtility(){
 
 			if(table[0][2]==table[1][1] && table[1][1]==table[2][0] && table[1][1]!='.'){
 				char here = table[1][1];
-				if(pc == here)
+				if(player         == here)
 					return utility::victory;
 				else
 					return utility::defeat;
@@ -94,7 +94,7 @@ int State::getUtility(){
 			for(int i=0;i<3;i++)
 				for(int j=0;j<3;j++)
 					if(table[i][j] == '.')
-						return utility::unfinished;
+						return utility::unfinished; 
 					return utility::tie;		
 
 

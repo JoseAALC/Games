@@ -1,5 +1,5 @@
 #include "game.hpp"
-
+int n =0;
 movement max(movement a,movement b){
 	if(a.first < b.first)
 		return b;
@@ -19,27 +19,33 @@ pair<int,int> game::minimax(State ini){
 
 	//assert(ini.table[winner.first][winner.second]=='.');
 	
-	//cout<<v<<endl;
+	cout<<v.first<<" "<<v.second.first<<" "<<v.second.second<<endl;
+
 	return v.second;
 }
 
 movement game::maxValue(State u){
 	movement check;
 	check.first=u.getUtility();
-	
-	if(check.first !=utility::unfinished){
+
+	if(check.first == utility::victory || check.first == utility::tie || check.first == utility::defeat ){
+		check.second.first = u.move.first;
+		check.second.second = u.move.second;
 		return check;
 			
 	}
 	
 	movement v;
-	v.first= INT_MIN;
-
+	v.first= -1000;
+	v.second = make_pair(-2,-2);
 	u.makeDescendents();
 	
 	while(!u.ls.empty()){
-		v.second = u.ls.front().move;
+		
 		v= max(v,minValue(u.ls.front()));
+		
+		assert(minValue(u.ls.front()).first!=1000);
+		
 		u.ls.pop_front();
 	}
 	return v;
@@ -49,17 +55,21 @@ movement game::minValue(State u){
 	movement check;
 	check.first=u.getUtility();
 	
-	if(check.first !=utility::unfinished){
+	if(check.first == utility::victory || check.first == utility::tie || check.first == utility::defeat ){
+		check.second.first = u.move.first;
+		check.second.second = u.move.second;
 		return check;
 	}
 	
 	movement v;
-	v.first= INT_MAX;
+	v.first= 1000;
+	v.second = make_pair(-2,-2);
 	u.makeDescendents();
 	
 	while(!u.ls.empty()){
-		v.second = u.ls.front().move;
 		v = min(v,maxValue(u.ls.front()));
+		assert(maxValue(u.ls.front()).first!=-1000);
+		
 		u.ls.pop_front();
 	}
 	return v;
@@ -128,7 +138,7 @@ void game::ui(){
 	cout<<endl;
 	cin>>choice;
 
-	while(ini.getUtility()== utility::unfinished){
+	while(ini.getUtility() != utility::victory || ini.getUtility() != utility::tie || ini.getUtility() != utility::defeat){
 
 		pair<int ,int> tmp;
 		switch(choice){
