@@ -1,10 +1,11 @@
 CONFIG = -std=c++11
+GRAPHIC =  -lsfml-graphics -lsfml-window -lsfml-system
 
 all:start
 	./a.out
 
-start:State.o main.o game.o
-	g++ -g main.o State.o game.o $(CONFIG)
+start:State.o main.o game.o gui.o
+	g++ -g main.o State.o game.o gui.o $(CONFIG) $(GRAPHIC)
 
 State.o:State.cpp
 	g++ -g -c State.cpp $(CONFIG)
@@ -14,6 +15,9 @@ main.o:main.cpp
 
 game.o:game.cpp
 	g++ -g -c game.cpp $(CONFIG) 
+
+gui.o:gui.cpp
+	g++ -g -c gui.cpp $(CONFIG) $(GRAPHIC)	
 
 clean:
 	rm *.o 
