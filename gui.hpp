@@ -28,9 +28,11 @@ private:
 	Sprite mTable[3][3];
 	vector<Sprite> toDraw;
 	bool isPlayer; 
-	
+	Font arial;
 	char table[3][3] = {{'.','.','.'},{'.','.','.'},{'.','.','.'} };
 	State ini;
+	Text mPosition,mResult;
+
 
 
 

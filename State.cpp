@@ -67,7 +67,7 @@ int State::getUtility(){
 
 			if(table[0][i]==table[1][i] && table[1][i]==table[2][i] && table[0][i]!='.')
 				if(pc == here)
-					return utility::victory;
+					return utility::victory ;
 				else
 					return utility::defeat;
 
@@ -85,7 +85,7 @@ int State::getUtility(){
 			if(table[0][2]==table[1][1] && table[1][1]==table[2][0] && table[1][1]!='.'){
 				char here = table[1][1];
 				if(pc == here)
-					return utility::victory;
+					return utility::victory ;
 				else
 					return utility::defeat;
 			}

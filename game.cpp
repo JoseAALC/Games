@@ -16,8 +16,6 @@ movement min(movement a,movement b){
 
 pair<int,int> game::minimax(State ini){
 	movement v = maxValue(ini);
-
-	cout<<v.first<<endl;
 	return v.second;
 }
 
@@ -35,13 +33,14 @@ movement game::maxValue(State u){
 	
 
 	movement v;
-	v.first= -1000;
+	v.first= -2000;
 	v.second = make_pair(-2,-2);
 	u.makeDescendents();
 	
 	while(!u.ls.empty()){
 		
 		v= max(v,minValue(u.ls.front()));
+		assert(minValue(u.ls.front()).first != 1000);
 			
 		u.ls.pop_front();
 	}
@@ -53,14 +52,15 @@ movement game::minValue(State u){
 	check.first=u.getUtility();
 	
 	if((check.first!=0 && check.first % 700 == 0 ) || u.moves ==4){
-		
+		cout<<"Deph: "<<u.moves<<endl;
+		cout<<"Utility: "<<u.getUtility()<<endl;
 		check.second.first = u.move.first;
 		check.second.second = u.move.second;
 		return check;
 	}
 	
 	movement v;
-	v.first= 1000;
+	v.first= 2000;
 	v.second = make_pair(-2,-2);
 	u.makeDescendents();
 	
@@ -75,61 +75,85 @@ movement game::minValue(State u){
 	return v;
 }
 
-/*
 
 pair<int,int> game::alfa_beta(State ini){
-	int v=(maxValueAB(ini,INT_MIN,INT_MAX));
+	movement v= maxValueAB(ini,INT_MIN,INT_MAX);
 
-	return winner;
+	return v.second;
 
 }
 
-int game::maxValueAB(State u,int alfa,int beta){
-	int check=u.getUtility();
-	if(check!=utility::unfinished)
-			return check;
-	int v = INT_MIN;
+movement game::maxValueAB(State u,int alfa,int beta){
+	movement check;
+	check.first=u.getUtility();
+
+	if((check.first!=0 && check.first % 700 == 0 ) || u.moves ==4){
+		cout<<"Deph: "<<u.moves<<endl;
+		cout<<"Utility: "<<u.getUtility()<<endl;
+		check.second.first = u.move.first;
+		check.second.second = u.move.second;
+		return check;
+			
+	}
 	
+
+	movement v;
+	v.first= INT_MIN;
+	v.second = make_pair(-2,-2);
 	u.makeDescendents();
 	
 	while(!u.ls.empty()){
-		v = max(v,minValueAB(u.ls.front(),alfa,beta));
+		v= max(v,minValueAB(u.ls.front(),alfa,beta));
+	
 		u.ls.pop_front();
-		if(v>= beta)
-			return v;
-		alfa = max(v,alfa);
-	}
-	return v;	
 
+		if(v.first>= beta)
+			return v;	
+		
+		alfa = max(v.first,alfa);
+	}
+	return v;
 }
 
-int game::minValueAB(State u,int alfa,int beta){
-	int check=u.getUtility();
-	if(check!=utility::unfinished)
-			return check;
-	int v = INT_MAX;
+movement game::minValueAB(State u,int alfa,int beta){
+	movement check;
+	check.first=u.getUtility();
+
+	if((check.first!=0 && check.first % 700 == 0 ) || u.moves ==4){
+		cout<<"Deph: "<<u.moves<<endl;
+		cout<<"Utility: "<<u.getUtility()<<endl;
+		check.second.first = u.move.first;
+		check.second.second = u.move.second;
+		return check;
+			
+	}
 	
+
+	movement v;	 
+	v.first= INT_MAX;
+	v.second = make_pair(-2,-2);
 	u.makeDescendents();
 	
 	while(!u.ls.empty()){
-		v = max(v,minValueAB(u.ls.front(),alfa,beta));
+		
+		v = min(v,maxValueAB(u.ls.front(),alfa,beta));
+		
+			
 		u.ls.pop_front();
-		if(v>= alfa)
+
+		if(v.first<= alfa)
 			return v;
-		beta = min(v,beta);
+		beta = min(v.first,beta);
 	}
-	return v;	
-
+	return v;
 }
-
-*/
 
 
 void game::ui(){
-	char table[3][3] = {{'.','.','.'},{'.','.','.'},{'.','.','.'} };
+	
+	char table[3][3] = {{'X','.','.'},{'O','X','.'},{'.','O','.'} };
 
 	State ini(table,'X');
-	
 	char choice; 
 
 	cout<<endl;
@@ -137,9 +161,10 @@ void game::ui(){
 	cout<<endl;
 	cin>>choice;
 
-	cout<<"Utility: "<<ini.getUtility()<<endl;
+	//cout<<"Utility: "<<ini.getUtility()<<endl;
 
 	while(ini.getUtility() % 700 != 0 || ini.getUtility()==0){
+
 
 		pair<int ,int> tmp;
 		switch(choice){

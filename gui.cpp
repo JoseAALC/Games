@@ -2,12 +2,26 @@
 
 
 
-Gui::Gui():mWindow(VideoMode(640,480),"Tic Tac Toe IA-FCUP2015/16",Style::Close),isPlayer(false),ini(table,'X')
+Gui::Gui():mWindow(VideoMode(640,480),"Tic Tac Toe IA-FCUP2015/16",Style::Close),isPlayer(false),ini(table,'X'),mPosition(),mResult()
+
 {
 	textures.load(Textures::Block,"square.png");
 	textures.load(Textures::Cross,"cross.png");
 	textures.load(Textures::Circle,"circle.png");
+	arial.loadFromFile("arial.ttf");
 	
+
+	mPosition.setPosition(250.f,50.f);
+	mPosition.setColor(Color::White);
+	mPosition.setFont(arial);
+	mPosition.setCharacterSize(18);
+	mPosition.setString("15");
+
+	mResult.setPosition(250.f,70.f);
+	mResult.setColor(Color::White);
+	mResult.setFont(arial);
+	mResult.setCharacterSize(18);
+	mResult.setString("Result: unfinished");
 
 	for(int i=0;i<3;i++){
 		for(int j=0;j<3;j++){
@@ -73,18 +87,32 @@ void Gui::handlerPlayerInput(Vector2i v){
 
 
 void Gui::update(){
+
 	if(ini.getUtility() % 700 != 0 || ini.getUtility()==0){
 		if(!isPlayer){
 			Sprite tmp;
+			
 			tmp.setTexture(textures.get(Textures::Cross));
-			pair<int,int> tmp2 = game::minimax(ini);
-			cout<<tmp2.first<<" "<<tmp2.second<<endl;
+			pair<int,int> tmp2 = game::alfa_beta(ini);
 			tmp.setPosition(55.f*tmp2.first,55.f*tmp2.second);
 			toDraw.push_back(tmp);
 			ini.table[tmp2.first][tmp2.second] ='X';
+			mPosition.setString("Computer move: "+ to_string(tmp2.first) + " " +to_string(tmp2.second) );
 			isPlayer = true;
+			
 
 		}
+	}
+	else{
+		if(ini.getUtility() == 1400)
+			mResult.setString("Result: You Lose");
+		else if(ini.getUtility() == 700)	
+			mResult.setString("Result: You Tie");
+		else if(ini.getUtility() == -700)
+			mResult.setString("Result: You Win");	
+		
+		isPlayer = false;
+		
 	}
 
 }
@@ -96,6 +124,7 @@ void Gui::render(){
 			mWindow.draw( mTable[i][j]);
 	for(int i=0;i<toDraw.size();i++)
 		mWindow.draw(toDraw[i]);
-			
+	mWindow.draw(mPosition);
+	mWindow.draw(mResult);		
 	mWindow.display();
 }

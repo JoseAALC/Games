@@ -22,10 +22,10 @@ namespace game{
 	movement minValue(State u);
 
 	pair<int,int> alfa_beta(State ini);
+	
+	movement  maxValueAB(State u,int alpha,int beta);
 
-	int maxValueAB(State u,int alpha,int beta);
-
-	int minValueAB(State u,int alpha,int beta);
+	movement  minValueAB(State u,int alpha,int beta);
 }
 
 
