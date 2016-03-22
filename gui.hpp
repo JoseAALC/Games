@@ -2,8 +2,13 @@
 #define GUI_HPP 
 
 #include <SFML/Graphics.hpp>
+#include "TextureHolder.hpp"
+#include <vector>
+#include <iostream>
+#include "State.hpp"
+#include "game.hpp"
 
-
+using namespace std;
 using namespace sf;
 
 
@@ -16,10 +21,17 @@ private:
 	void processEvents();
 	void update();
 	void render();
-	void handlerPlayerInput();
+	void handlerPlayerInput(Vector2i v);
 private:
 	RenderWindow mWindow;
+	TextureHolder textures;
+	Sprite mTable[3][3];
+	vector<Sprite> toDraw;
+	bool isPlayer; 
 	
+	char table[3][3] = {{'.','.','.'},{'.','.','.'},{'.','.','.'} };
+	State ini;
+
 
 
 
