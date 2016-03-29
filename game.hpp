@@ -1,14 +1,14 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "State.hpp"
+#include "movement.hpp"
+#include <chrono>
 
-typedef pair<int,pair<int,int>> movement;
+using namespace std::chrono;
 
+Movement max(Movement a,Movement b);
 
-movement max(movement a,movement b);
-
-movement min(movement a,movement b);
+Movement min(Movement a,Movement b);
 
 
 namespace game{
@@ -17,15 +17,16 @@ namespace game{
 
 	pair<int,int> minimax(State ini);
 
-	movement maxValue(State u);
+	Movement maxValue(State u);
 
-	movement minValue(State u);
+	Movement minValue(State u);
 
 	pair<int,int> alfa_beta(State ini);
 	
-	movement  maxValueAB(State u,int alpha,int beta);
+	Movement  maxValueAB(State u,int alfa,int beta);
 
-	movement  minValueAB(State u,int alpha,int beta);
+	Movement  minValueAB(State u,int alfa,int beta);
+
 }
 
 

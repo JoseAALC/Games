@@ -1,75 +1,84 @@
 #include "game.hpp"
 
-movement max(movement a,movement b){
-	if(a.first < b.first)
+Movement max(Movement a,Movement b){
+	if(a.moveValue < b.moveValue){
+		delete (a.leaf);
 		return b;
-	else 
+	}
+	else if(a.moveValue > b.moveValue){
+		delete (b.leaf);
 		return a;
+	}
+
+	if	(a.getLeafDepth() > b.getLeafDepth()){
+		delete (a.leaf);
+		return b;
+	}
+	else {
+		delete (b.leaf);
+		return a;
+	}
 }
 
-movement min(movement a,movement b){
-	if(a.first > b.first)
+Movement min(Movement a,Movement b){
+
+	if(a.moveValue > b.moveValue){
+		delete (a.leaf);
 		return b;
-	else 
+	}
+	else if(a.moveValue < b.moveValue){
+		delete (b.leaf);
 		return a;
-}
+	}
+	else if	(a.getLeafDepth() < b.getLeafDepth()){
+		delete (a.leaf);
+		return b;
+	}
+	else {
+		delete (b.leaf);
+		return a;
+	}
+}	
 
 pair<int,int> game::minimax(State ini){
-	movement v = maxValue(ini);
-	return v.second;
+	Movement v = maxValue(ini);
+	return v.move;	
 }
 
-movement game::maxValue(State u){
-	movement check;
-	check.first=u.getUtility();
+Movement game::maxValue(State u){
+	Movement check(u.getUtility(),u.move,&u);
 
-	if((check.first!=0 && check.first % 700 == 0 ) || u.moves ==4){
-		
-		check.second.first = u.move.first;
-		check.second.second = u.move.second;
-		return check;
-			
+	if((check.moveValue!=0 && check.moveValue % 700 == 0 ) || u.moves == 4){
+		return check;		
 	}
 	
+	Movement v(-2000);
 
-	movement v;
-	v.first= -2000;
-	v.second = make_pair(-2,-2);
 	u.makeDescendents();
 	
 	while(!u.ls.empty()){
 		
 		v= max(v,minValue(u.ls.front()));
-		assert(minValue(u.ls.front()).first != 1000);
+		//assert(minValue(u.ls.front()).moveValue != 1000);
 			
 		u.ls.pop_front();
 	}
 	return v;
 }
 
-movement game::minValue(State u){
-	movement check;
-	check.first=u.getUtility();
+Movement game::minValue(State u){
+	Movement check(u.getUtility(),u.move,&u);
 	
-	if((check.first!=0 && check.first % 700 == 0 ) || u.moves ==4){
-		cout<<"Deph: "<<u.moves<<endl;
-		cout<<"Utility: "<<u.getUtility()<<endl;
-		check.second.first = u.move.first;
-		check.second.second = u.move.second;
+	if((check.moveValue!=0 && check.moveValue % 700 == 0 ) || u.moves ==4){	
 		return check;
 	}
 	
-	movement v;
-	v.first= 2000;
-	v.second = make_pair(-2,-2);
+	Movement v(2000);
 	u.makeDescendents();
 	
 	while(!u.ls.empty()){
 
 		v = min(v,maxValue(u.ls.front()));
-
-		
-		
 		u.ls.pop_front();
 	}
 	return v;
@@ -77,61 +86,47 @@ movement game::minValue(State u){
 
 
 pair<int,int> game::alfa_beta(State ini){
-	movement v= maxValueAB(ini,INT_MIN,INT_MAX);
+	Movement v= maxValueAB(ini,INT_MIN,INT_MAX);
 
-	return v.second;
+	return v.move;
 
 }
 
-movement game::maxValueAB(State u,int alfa,int beta){
-	movement check;
-	check.first=u.getUtility();
+Movement game::maxValueAB(State u,int alfa,int beta){
+	Movement check(u.getUtility(),u.move,&u);
 
-	if((check.first!=0 && check.first % 700 == 0 ) || u.moves ==4){
-		cout<<"Deph: "<<u.moves<<endl;
-		cout<<"Utility: "<<u.getUtility()<<endl;
-		check.second.first = u.move.first;
-		check.second.second = u.move.second;
+	if((check.moveValue!=0 && check.moveValue % 700 == 0 ) || u.moves ==4){
+
 		return check;
 			
 	}
 	
 
-	movement v;
-	v.first= INT_MIN;
-	v.second = make_pair(-2,-2);
+	Movement v(INT_MIN);
 	u.makeDescendents();
 	
 	while(!u.ls.empty()){
 		v= max(v,minValueAB(u.ls.front(),alfa,beta));
-	
 		u.ls.pop_front();
 
-		if(v.first>= beta)
+		if(v.moveValue>= beta)
 			return v;	
 		
-		alfa = max(v.first,alfa);
+		alfa = max(v.moveValue,alfa);
 	}
 	return v;
 }
 
-movement game::minValueAB(State u,int alfa,int beta){
-	movement check;
-	check.first=u.getUtility();
+Movement game::minValueAB(State u,int alfa,int beta){
+	Movement check(u.getUtility(),u.move,&u);
 
-	if((check.first!=0 && check.first % 700 == 0 ) || u.moves ==4){
-		cout<<"Deph: "<<u.moves<<endl;
-		cout<<"Utility: "<<u.getUtility()<<endl;
-		check.second.first = u.move.first;
-		check.second.second = u.move.second;
+	if((check.moveValue!=0 && check.moveValue % 700 == 0 ) || u.moves ==4){
 		return check;
 			
 	}
 	
 
-	movement v;	 
-	v.first= INT_MAX;
-	v.second = make_pair(-2,-2);
+	Movement v(INT_MAX);	 
 	u.makeDescendents();
 	
 	while(!u.ls.empty()){
@@ -141,9 +136,9 @@ movement game::minValueAB(State u,int alfa,int beta){
 			
 		u.ls.pop_front();
 
-		if(v.first<= alfa)
+		if(v.moveValue<= alfa)
 			return v;
-		beta = min(v.first,beta);
+		beta = min(v.moveValue,beta);
 	}
 	return v;
 }
@@ -151,17 +146,20 @@ movement game::minValueAB(State u,int alfa,int beta){
 
 void game::ui(){
 	
-	char table[3][3] = {{'X','.','.'},{'O','X','.'},{'.','O','.'} };
+	char table[3][3] = {{'.','.','.'},{'.','.','.'},{'.','.','.'} };
 
-	State ini(table,'X');
+	
 	char choice; 
-
+	char algorithm;
 	cout<<endl;
+	cout<<"\tWhich algorithm will be used?"<<endl;
+	cin>>algorithm;
 	cout<<"\tWhich player will play first?"<<endl;
 	cout<<endl;
 	cin>>choice;
-
-	//cout<<"Utility: "<<ini.getUtility()<<endl;
+	cout<<"\tWhich symbol will be computer?"<<endl;
+	cin>>pc;
+	State ini(table,pc);
 
 	while(ini.getUtility() % 700 != 0 || ini.getUtility()==0){
 
@@ -170,7 +168,18 @@ void game::ui(){
 		switch(choice){
 
 			case 'P' :
-			tmp = minimax(ini);
+			if(algorithm=='m'){
+				high_resolution_clock::time_point t1 = high_resolution_clock::now();
+				tmp = minimax(ini);
+				high_resolution_clock::time_point t2 = high_resolution_clock::now();
+				cout<<"Time elapsed: "<<duration_cast<microseconds>( t2 - t1 ).count()<<endl;
+			}
+			else{
+				high_resolution_clock::time_point t1 = high_resolution_clock::now();
+				tmp = alfa_beta(ini);
+				high_resolution_clock::time_point t2 = high_resolution_clock::now();
+				cout<<"Time elapsed: "<<duration_cast<microseconds>( t2 - t1 ).count()<<endl;
+			}
 			cout<<tmp.first<<" "<<tmp.second<<endl;
 			break;
 

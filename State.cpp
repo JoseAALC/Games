@@ -1,7 +1,8 @@
 #include "State.hpp"
 
 
-char pc ='X';
+
+char pc='X';
 
 
 State::State(char table[][3],int moves,char player,pair<int,int> move){
@@ -61,7 +62,7 @@ int State::getUtility(){
 		char here = table[i][i];
 		if(table[i][0]==table[i][1] && table[i][1]==table[i][2] && table[i][0]!='.')
 			if(pc == here)
-				return utility::victory;
+				return utility::victory	;
 			else
 				return utility::defeat;
 

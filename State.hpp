@@ -11,10 +11,11 @@
 using namespace std;
 
 
+
 enum utility{ victory=1400,tie=700,defeat=-700,unfinished='?'};
 
 
-
+extern char pc;
 
 class State{
 
@@ -25,8 +26,8 @@ public:
 	int moves;
 	pair<int,int> move;
 
-
-  
+	
+  	State(){}
 	State(char table[3][3],int moves,char player,pair<int,int> move);
 	State(char table[3][3],char player):State(table,0,player,make_pair(-1,-1)){};
 
