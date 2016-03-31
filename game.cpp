@@ -159,7 +159,14 @@ void game::ui(){
 	cin>>choice;
 	cout<<"\tWhich symbol will be computer?"<<endl;
 	cin>>pc;
-	State ini(table,pc);
+	char start;
+
+	if(choice == 'P')
+		start =pc;
+	else
+		start = (pc=='X') ? 'O':'X'; 
+
+	State ini(table,start);
 
 	while(ini.getUtility() % 700 != 0 || ini.getUtility()==0){
 
@@ -184,7 +191,14 @@ void game::ui(){
 			break;
 
 			case 'I':
+			cout<<"\tInsert Position to play:"<<endl;
+			cout<<endl;
 			cin>>tmp.first>>tmp.second;
+			if(tmp.first <0 || tmp.first>=3 || tmp.second < 0 || tmp.second >=3 || ini.table[tmp.first][tmp.second]!='.' ){
+				cout<<"Invalid Position"<<endl;
+				cout<<endl;
+				continue;
+			}
 			break;
 		}
 
@@ -195,5 +209,15 @@ void game::ui(){
 		choice = (choice=='P') ? 'I':'P';
 		ini.print();
 
+	}
+
+	if(ini.getUtility() == utility::victory){
+		cout<<"You Lose the game!"<<endl;
+	}
+	if(ini.getUtility() == utility::defeat){
+		cout<<"You are a cheater!"<<endl;
+	}
+	if(ini.getUtility() == utility::tie){
+		cout<<"We are tie"<<endl;
 	}
 }

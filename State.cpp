@@ -2,7 +2,7 @@
 
 
 
-char pc='X';
+char pc;
 
 
 State::State(char table[][3],int moves,char player,pair<int,int> move){
